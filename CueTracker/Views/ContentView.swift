@@ -6,24 +6,35 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     
-    @State var user : User
+    @Environment(\.modelContext) private var context
+    
+    @Query private var cues : [Cue]
     
     var body: some View {
 
         VStack {
-            CueDetailView(cueList: user.cueLists[0])
+            
+            CueDetailView(cues: cues)
                 .toolbar {
-                    Button(action: addCue) {
+                    Button(action: {
+                        print("Adding cue")
+                        context.insert(Cue())
+                    }) {
                         Label("Add Cue", systemImage: "plus")
                             .labelsHidden()
                     }
-                    Button(action: saveCues) {
+                    
+                    Button(action: {
+                        // TODO: IMPLEMENT
+                    }) {
                         Label("Save CueList", systemImage: "square.and.arrow.down")
                             .labelsHidden()
                     }
+                    .disabled(context.hasChanges)
                     
                 }
         }
@@ -31,22 +42,6 @@ struct ContentView: View {
     }
 }
 
-extension ContentView {
-    
-    func addCue() {
-        user.cueLists[0].addCue(number: 2)
-    }
-    
-    func saveCues() {
-//        print("saving")
-//        user.save()
-    }
-}
-
 #Preview {
-    var user = User()
-    var newCueList = CueList(number: 1)
-    
-    
-    ContentView(user: user)
+    ContentView()
 }

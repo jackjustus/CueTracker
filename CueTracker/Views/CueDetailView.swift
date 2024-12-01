@@ -11,7 +11,7 @@ import SwiftUI
 
 struct CueDetailView: View {
     
-    @StateObject var cueList: CueList
+    @State var cues: [Cue]
     
     @State var searchText: String = ""
     @State private var selection = Set<Cue.ID>()
@@ -25,7 +25,7 @@ struct CueDetailView: View {
         
         
         
-        Table($cueList.cues, selection: $selection) {
+        Table($cues, selection: $selection) {
             
             // Cue Column
             TableColumn("Cue") { $cue in
@@ -52,26 +52,10 @@ struct CueDetailView: View {
         .tableColumnHeaders(.automatic)
         .colorScheme(.dark)
         .searchable(text: $searchText)
-        .navigationTitle(cueList.name)
         .navigationSubtitle("ETC Eos")
     }
 }
 
-extension CueDetailView {
-    
-    func sendOSC() {
-        
-    }
-    
-    func addCue() {
-        // TODO: Implemenet smart numbering for cue creation
-        cueList.addCue(number: currentCueNum)
-        currentCueNum += 1
-    }
-}
-
 #Preview {
-    var user = User()
-    var cueList = user.selectedCueList
-    CueDetailView(cueList: user.cueLists[0])
+    CueDetailView(cues: [Cue(), Cue()])
 }
